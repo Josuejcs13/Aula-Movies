@@ -1,12 +1,50 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Input from "../../../../components/input/input";
 import Button from "../../../../components/button/button";
 import Checkbox from "../../../../components/checkbox/checkbox";
+import FormError from "../../../../components/formError/formError";
+
+type errorType = {
+  password: string;
+  email: string;
+};
 
 function FormLogin() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [rememberMe, setRememberMe] = useState<boolean>(false);
+  const [error, setError] = useState<errorType>({ password: "", email: "" });
+
+  const validateEmail = () => {
+    const emailRegex = /^[\w\-\.]+@([\w-]+\.)+[\w-]{2,}$/;
+    if (!emailRegex.test(email)) {
+      setError({
+        ...error,
+        email: "Informe um email ou número de telefone válido.",
+      });
+      return;
+    }
+    setError({ ...error, email: "" });
+  };
+
+  const validatePassword = () => {
+    if (!(password.length >= 4 && password.length <= 60)) {
+      setError({
+        ...error,
+        password: "A senha deve ter entre 4 e 60 caracteres.",
+      });
+      return;
+    }
+    setError({ ...error, password: "" });
+  };
+
+  useEffect(() => {
+    validateEmail();
+  }, [email]);
+
+  useEffect(() => {
+    validatePassword();
+  }, [password]);
 
   return (
     <div
@@ -20,13 +58,27 @@ function FormLogin() {
         placeholder="Email ou número de celular"
         type="text"
       />
+      {error.email && <FormError>{error.email}</FormError>}
       <Input
         value={password}
         setValue={setPassword}
         placeholder="Senha"
         type="text"
       />
-      <Button handleClick={() => {}}>Entrar</Button>
+      {error.password && <FormError>{error.password}</FormError>}
+      <Button
+        handleClick={() => {}}
+        disabled={
+          !email || !password || error.email !== "" || error.password !== ""
+        }
+        color={
+          !email || !password || error.email !== "" || error.password !== ""
+            ? "bg-gray-400"
+            : "bg-red-600"
+        }
+      >
+        Entrar
+      </Button>
       <p className="text-white text-center">OU</p>
       <Button color="bg-gray-500/50" handleClick={() => {}}>
         Usar código de acesso
