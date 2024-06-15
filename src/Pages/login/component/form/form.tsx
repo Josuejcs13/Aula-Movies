@@ -3,16 +3,23 @@ import Input from "../../../../components/input/input";
 import Button from "../../../../components/button/button";
 import Checkbox from "../../../../components/checkbox/checkbox";
 import FormError from "../../../../components/formError/formError";
+import { useNavigate } from "react-router-dom";
 
 type errorType = {
   password: string;
   email: string;
 };
 
+const user = {
+  email: "teste@teste.com",
+  password: "asdf",
+};
+
 function FormLogin() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [rememberMe, setRememberMe] = useState<boolean>(false);
+  const navigate = useNavigate();
   const [error, setError] = useState<errorType>({ password: "", email: "" });
 
   const validateEmail = () => {
@@ -36,6 +43,14 @@ function FormLogin() {
       return;
     }
     setError({ ...error, password: "" });
+  };
+
+  const handleLogin = () => {
+    if (user.email === email && user.password === password) {
+      navigate("/home");
+      return;
+    }
+    alert("usuário inválido");
   };
 
   useEffect(() => {
@@ -67,7 +82,7 @@ function FormLogin() {
       />
       {error.password && <FormError>{error.password}</FormError>}
       <Button
-        handleClick={() => {}}
+        handleClick={handleLogin}
         disabled={
           !email || !password || error.email !== "" || error.password !== ""
         }
