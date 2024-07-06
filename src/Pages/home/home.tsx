@@ -1,6 +1,5 @@
-import { Link } from "react-router-dom";
-import { IMAGE_BASE_URL } from "../../hooks/constants";
 import useMovies from "../../hooks/useMovies";
+import MovieCard from "../../components/movieCard";
 
 const Home = () => {
   const { movies, setPage, isLoading } = useMovies();
@@ -19,20 +18,7 @@ const Home = () => {
         <button onClick={handleNext}>Próximo</button>
         <button onClick={handlePrev}>Anterior</button>
         {movies.map((movie) => (
-          <Link
-            to={`/movie/${movie.id}`}
-            key={movie.id}
-            className="bg-white shadow-md rounded-lg overflow-hidden"
-          >
-            <img
-              src={`${IMAGE_BASE_URL}${movie.poster_path}`}
-              alt={movie.title}
-              className="w-full h-72 object-cover"
-            />
-            <div className="p-4">
-              <h2 className="text-lg font-semibold">{movie.title}</h2>
-            </div>
-          </Link>
+          <MovieCard movie={movie} key={movie.id} />
         ))}
       </div>
     </div>
