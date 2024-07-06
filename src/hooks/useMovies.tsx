@@ -10,6 +10,7 @@ const useMovies = () => {
   const [page, setPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [movie, setMovie] = useState<Movie>();
+  const [favorites, setFavorites] = useState<Movie[]>([]);
 
   const getMovieById = async (id: string) => {
     try {
@@ -18,6 +19,17 @@ const useMovies = () => {
       );
       setMovie(response.data as Movie);
     } catch (error) {}
+  };
+
+  const getAllFavoritesById = async (idList: string[]) => {
+    const favoritesList: Movie[] = [];
+    idList.map(async (id) => {
+      const response = await axios.get(
+        `${BASE_URL}/movie/${id}?api_key=${apiKey}`
+      );
+      favoritesList.push(response.data as Movie);
+    });
+    setFavorites(favoritesList);
   };
 
   useEffect(() => {
@@ -43,6 +55,8 @@ const useMovies = () => {
     isLoading,
     movie,
     getMovieById,
+    getAllFavoritesById,
+    favorites,
   };
 };
 
