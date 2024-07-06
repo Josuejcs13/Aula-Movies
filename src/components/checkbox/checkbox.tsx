@@ -1,10 +1,11 @@
 export interface CheckboxProps {
   id: string;
   value: boolean;
-  label: string;
+  label?: string;
   setValue: (value: boolean) => void;
   defaultChecked?: boolean;
   disabled?: boolean;
+  className?: string;
 }
 
 const Checkbox: React.FC<CheckboxProps> = ({
@@ -14,8 +15,9 @@ const Checkbox: React.FC<CheckboxProps> = ({
   setValue,
   defaultChecked,
   disabled,
+  className,
 }) => (
-  <div className="w-full flex gap-2 cursor-pointer">
+  <div className={`flex gap-2 cursor-pointer ${className}`}>
     <input
       className="
             cursor-pointer  
