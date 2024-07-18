@@ -1,147 +1,163 @@
 import { useEffect, useState } from "react";
+import IconNetflix from "../../components/iconNetflex";
 import { useNavigate } from "react-router-dom";
+import { TypeIsTouched, TypeError, InputType } from "../../types";
+import FormError from "../../components/formError/formError";
 import Input from "../../components/input/input";
 import Button from "../../components/button/button";
-import FormError from "../../components/formError/formError";
-import Checkbox from "../../components/checkbox/checkbox";
-
-type errorType = {
-  password: string;
-  email: string;
-};
-
-const user = {
-  email: "teste@teste.com",
-  password: "asdf",
-};
 
 const Login = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [rememberMe, setRememberMe] = useState<boolean>(false);
+  const [inputEmail, setInputEmail] = useState<string>("");
+  const [inputPassword, setInputPassword] = useState<string>("");
   const navigate = useNavigate();
-  const [error, setError] = useState<errorType>({ password: "", email: "" });
+  const [error, setError] = useState<TypeError>({
+    email: "Please enter a valid email or phone number.",
+    password: "Your password must contain between 4 and 60 characters.",
+  });
+  const [isTouched, setIsTouched] = useState<TypeIsTouched>({
+    email: false,
+    password: false,
+  });
 
-  const validateEmail = () => {
-    const emailRegex = /^[\w\-.]+@([\w-]+\.)+[\w-]{2,5}$/;
-    if (!emailRegex.test(email)) {
-      setError({
-        ...error,
-        email: "Informe um email ou número de telefone válido.",
-      });
-      return;
-    }
-    setError({ ...error, email: "" });
+  const user = {
+    email: "test@test.com",
+    password: "test1234",
   };
 
   const validatePassword = () => {
-    if (!(password.length >= 4 && password.length <= 60)) {
+    if (inputPassword.length >= 4 && inputPassword.length <= 60) {
       setError({
         ...error,
-        password: "A senha deve ter entre 4 e 60 caracteres.",
+        password: "",
       });
       return;
     }
-    setError({ ...error, password: "" });
+    setError({
+      ...error,
+      password: "Your password must contain between 4 and 60 characters.",
+    });
   };
 
-  const handleLogin = () => {
-    if (user.email === email && user.password === password) {
-      navigate("/home");
+  const validateEmail = () => {
+    const regex = /^[\w\-.]+@([\w-]+\.)+[\w-]{2,5}$/;
+    if (regex.test(inputEmail)) {
+      setError({
+        ...error,
+        email: "",
+      });
       return;
     }
-    alert("usuário inválido");
+    setError({
+      ...error,
+      email: "Please enter a valid email or phone number.",
+    });
   };
 
   useEffect(() => {
     validateEmail();
-  }, [email]);
+  }, [inputEmail]);
 
   useEffect(() => {
     validatePassword();
-  }, [password]);
+  }, [inputPassword]);
+
+  const isValid = Boolean(error.email) || Boolean(error.password);
+
+  const handleSubmit = () => {
+    if (user.email === inputEmail && user.password === inputPassword) {
+      navigate("/home");
+      return;
+    }
+    alert("errado");
+  };
+
+  const handleBlur = () => {
+    setIsTouched({
+      ...isTouched,
+      email: true,
+      password: true,
+    });
+    validateEmail();
+  };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-black/43">
-      <div className="relative w-full h-full flex items-center justify-center">
-        <img
-          className="absolute top-6 left-8 opacity-100 h-10"
-          src="https://www.freepnglogos.com/uploads/netflix-logo-drawing-png-19.png"
-          alt="netflix logo"
+    <div className="flex justify-center bg-black/50 h-screen items-center relative">
+      <img
+        className="h-full w-full absolute z-[-1]"
+        src="https://assets.nflxext.com/ffe/siteui/vlv3/cacfadb7-c017-4318-85e4-7f46da1cae88/f2e98033-57b5-4cf9-993d-ee774904fc5e/CA-en-20240603-popsignuptwoweeks-perspective_alpha_website_small.jpg"
+      />
+      <IconNetflix className="absolute top-7 left-8 h-10 " />
+      <form className="flex flex-col justify-center bg-black/75 px-16 pb-24 rounded-3.5 pt-11 gap-4 w-[28.125rem] text-white">
+        <h1 className="text-white text-3xl font-bold pb-2">Sing In</h1>
+        <Input
+          className={isTouched.email && error.email ? "border-red-600" : ""}
+          setValue={setInputEmail}
+          value={inputEmail}
+          typeInput={InputType.Email}
+          placeholder="Email or phone number"
+          onFocus={() =>
+            setIsTouched({
+              ...isTouched,
+              email: false,
+            })
+          }
+          onBlur={handleBlur}
         />
-        <img
-          className="h-full absolute top-0 left-0 w-full -z-10"
-          src="https://assets.nflxext.com/ffe/siteui/vlv3/51c1d7f7-3179-4a55-93d9-704722898999/db9d7243-d5cf-4778-885d-731db4bb13a2/BR-pt-20240610-popsignuptwoweeks-perspective_alpha_website_large.jpg"
-          alt="netflix background image"
+        {isTouched.email && error.email ? (
+          <FormError>{error.email}</FormError>
+        ) : (
+          ""
+        )}
+        <Input
+          className={
+            isTouched.password && error.password ? "border-red-600" : ""
+          }
+          setValue={setInputPassword}
+          value={inputPassword}
+          typeInput={InputType.Password}
+          placeholder="Password"
+          onFocus={() =>
+            setIsTouched({
+              ...isTouched,
+              password: false,
+            })
+          }
+          onBlur={handleBlur}
         />
-
-        <div
-          className="bg-black/70 w-[28.125rem] py-12
-        z-10 rounded-md flex flex-col gap-4 px-16"
+        {isTouched.password && error.password ? (
+          <FormError>{error.password}</FormError>
+        ) : (
+          ""
+        )}
+        <Button
+          color="bg-[#e50914] disabled:cursor-not-allowed"
+          handleSubmit={handleSubmit}
+          isDisable={isValid}
         >
-          <h1 className="text-3xl opacity-100 text-white font-bold mb-3">
-            Entrar
-          </h1>
-          <Input
-            value={email}
-            setValue={setEmail}
-            placeholder="Email ou número de celular"
-            type="text"
-          />
-          {error.email && <FormError>{error.email}</FormError>}
-          <Input
-            value={password}
-            setValue={setPassword}
-            placeholder="Senha"
-            type="text"
-          />
-          {error.password && <FormError>{error.password}</FormError>}
-          <Button
-            handleClick={handleLogin}
-            disabled={
-              !email || !password || error.email !== "" || error.password !== ""
-            }
-            color={
-              !email || !password || error.email !== "" || error.password !== ""
-                ? "bg-gray-400"
-                : "bg-red-600"
-            }
-          >
-            Entrar
-          </Button>
+          Sing In
+        </Button>
+        <div className="flex justify-center">
           <a
-            href="#"
-            className="text-white text-center ease-in-out hover:underline decoration-solid"
+            className=" text-white hover:text-zinc-400 hover:underline"
+            href="https://www.netflix.com/ca/LoginHelp"
           >
-            Esqueceu a senha?
+            Forgot password?
           </a>
-          <Checkbox
-            value={rememberMe}
-            setValue={setRememberMe}
-            id="checkbox"
-            label="Lembrar de mim"
-          />
-          <p className="text-white">
-            Novo por aqui?
-            <a
-              className="text-blue-600 font-medium hover:underline hover:text-blue-800 decoration-solid transition-all duration-300"
-              href="#"
-            >
-              Clique aqui.
-            </a>
-          </p>
-          <p className="text-gray-500 text-xs">
-            Esta página é protegida pelo Google reCAPTCHA para garantir que você
-            não é um robô.
-            <a
-              href="#"
-              className="text-blue-700 hover:underline decoration-solid transition-all duration-300"
-            >
-              Saiba mais.
-            </a>
-          </p>
         </div>
-      </div>
+        <div className="flex gap-3">
+          <input type="checkbox" />
+          <p>Remember me</p>
+        </div>
+        <p className="flex gap-2 text-gray-300/80">
+          New to Netflix?
+          <a
+            href="https://www.netflix.com/ca/"
+            className="text-blue-600 hover:text-blue-800 font-medium hover:underline"
+          >
+            Sign up now.
+          </a>
+        </p>
+      </form>
     </div>
   );
 };

@@ -1,31 +1,27 @@
 type ButtonProps = {
   children: string;
-  handleClick: () => void;
+  handleSubmit: () => void;
+  isDisable?: boolean;
   className?: string;
-  color?: string;
-  disabled?: boolean;
+  color: string;
 };
 
-const Button = ({
+function Button({
   children,
-  handleClick,
+  handleSubmit,
+  isDisable,
   className,
   color,
-  disabled = false,
-}: ButtonProps) => {
+}: ButtonProps) {
   return (
     <button
-      className={`py-3 text-sm text-white rounded-sm font-bold shadow-sm
-           hover:brightness-75 transition-all duration-300 ease-in-out
-          ${color} ${className} ${
-        disabled ? "bg-gray-400 cursor-not-allowed" : color
-      } ${className}`}
-      onClick={handleClick}
-      disabled={disabled}
+      disabled={isDisable}
+      className={` py-2 text-white rounded font-medium ${className} ${color} `}
+      onClick={handleSubmit}
     >
       {children}
     </button>
   );
-};
+}
 
 export default Button;
