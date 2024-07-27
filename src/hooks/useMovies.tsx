@@ -19,21 +19,34 @@ const useMovies = () => {
         `${BASE_URL}/movie/${id}?api_key=${apiKey}`
       );
       setMovie(response.data as Movie);
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const getAllFavoritesById = async (favoriteList: Favorite[]) => {
-    const promisesFavorites = favoriteList.map(async (favorite) => {
-      const response = await axios.get(
-        `${BASE_URL}/${favorite.type === ShowType.Movies ? "movie" : "tv"}/${
-          favorite.id
-        }?api_key=${apiKey}`
-      );
-      return response.data as Movie;
-    });
-    Promise.all(promisesFavorites).then((resolvedFavorites) =>
-      setFavorites(resolvedFavorites)
-    );
+    console.log(favoriteList);
+
+    // const promisesFavorites = favoriteList.map(async (favorite) => {
+    //   const response = await axios.get(
+    //     `${BASE_URL}/${favorite.type === ShowType.Movies ? "movie" : "tv"}/${
+    //       favorite.id
+    //     }?api_key=${apiKey}`
+    //   );
+    //   if (favorite.type === ShowType.Series) {
+    //     return {
+    //       id: response.data.id,
+    //       title: response.data.name,
+    //       backdrop_path: response.data.backdrop_path,
+    //       poster_path: response.data.poster_path,
+    //       type: ShowType.Series,
+    //     } as Movie;
+    //   }
+    //   return response.data as Movie;
+    // });
+    // Promise.all(promisesFavorites).then((resolvedFavorites) =>
+    // setFavorites(resolvedFavorites)
+    // );
   };
 
   const fetchPopularSeries = async () => {
