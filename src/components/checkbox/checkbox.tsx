@@ -2,7 +2,7 @@ export interface CheckboxProps {
   id: string;
   value: boolean;
   label?: string;
-  setValue: (value: boolean) => void;
+  setValue: (value: boolean, id: number) => void;
   defaultChecked?: boolean;
   disabled?: boolean;
   className?: string;
@@ -29,7 +29,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
       type="checkbox"
       id={id}
       checked={value}
-      onChange={(e) => setValue(e.target.checked)}
+      onChange={(event) => setValue(event.target.checked, Number(id))}
       disabled={disabled}
       defaultChecked={defaultChecked}
     />
