@@ -1,28 +1,39 @@
-type InputProps = {
+import { InputType } from "../../types";
+
+type InputLoginProps = {
+  setValue: React.Dispatch<React.SetStateAction<string>>;
+  value: string;
+  typeInput: InputType;
   className?: string;
   placeholder: string;
-  value: string;
-  type: string;
-  setValue: (value: string) => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
 };
 
-const Input = ({
-  className,
-  placeholder,
-  value,
-  type,
+function Input({
   setValue,
-}: InputProps) => {
+  value,
+  typeInput,
+  placeholder,
+  className,
+  onBlur,
+  onFocus,
+}: InputLoginProps) {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setValue(event.target.value);
+  };
+
   return (
     <input
-      className={`bg-gray-300/20 focus:ring-2 focus:ring-white text-white placeholder:text-white 
-        border border-gray-200 rounded p-4 ${className}`}
+      className={`bg-stone-900/55 text-gray-300 placeholder:text-gray-300/80 border border-gray-400 p-3.5 rounded ${className}`}
       value={value}
-      onChange={(e) => setValue(e.target.value)}
       placeholder={placeholder}
-      type={type}
+      type={InputType.Email === typeInput ? "email" : "password"}
+      onChange={handleChange}
+      onFocus={onFocus}
+      onBlur={onBlur}
     />
   );
-};
+}
 
 export default Input;
