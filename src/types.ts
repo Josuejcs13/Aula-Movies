@@ -11,6 +11,7 @@ export type Series = {
   id: number;
   name: string;
   backdrop_path: string;
+  original_title: string;
   poster_path: string;
 };
 
@@ -27,6 +28,16 @@ export type TypeError = {
 export type TypeIsTouched = {
   email: boolean;
   password: boolean;
+};
+
+export type FavoriteContextType = {
+  favorites: Movie[];
+  handleFavorite: (movie: Movie) => void;
+};
+
+export type SectionContextType = {
+  topSearch: Movie[];
+  popularSeries: Movie[];
 };
 
 export enum InputType {
