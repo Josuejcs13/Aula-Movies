@@ -1,33 +1,27 @@
 import { Link } from "react-router-dom";
 import { IMAGE_BASE_URL } from "../../hooks/constants";
-import { Favorite, Movie, ShowType } from "../../types";
+import { Movie } from "../../types";
 import Checkbox from "../checkbox/checkbox";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import FavoriteContext from "../../context/favorite-context";
 
 type MovieCardProps = {
   movie: Movie;
-  handleFavorite: (id: number, type: ShowType) => void;
 };
 
-function MovieCard({
-  movie: { id, poster_path, title, type },
-  handleFavorite,
-}: MovieCardProps) {
+function MovieCard({ movie }: MovieCardProps) {
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const { handleFavorite } = useContext(FavoriteContext);
+  const { poster_path, title, id } = movie;
+  const { favorites } = useContext(FavoriteContext);
 
   useEffect(() => {
-    const favoritesList =
-      JSON.parse(localStorage.getItem("favorites") as string) || [];
-    const favorite = favoritesList.some(
-      (favorite: Favorite) => favorite.id === id
-    );
-    if (favorite) {
-      setIsFavorite(true);
-    }
-  }, []);
-  const handleClickCheckBox = (value: boolean, id: number) => {
+    setIsFavorite(favorites.some((favorite) => favorite.id === movie.id));
+  }, [favorites, movie.id]);
+
+  const handleClickCheckBox = (value: boolean) => {
     setIsFavorite(value);
-    handleFavorite(id, type);
+    handleFavorite(movie);
   };
 
   return (
