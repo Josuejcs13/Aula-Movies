@@ -1,6 +1,16 @@
-import "./App.css";
+import { RouterProvider } from "react-router-dom";
+import router from "./routes/routes";
+import FavoriteProvider from "./context/favorite-provider";
+import SectionProvider from "./context/sections-provider";
 
 function App() {
-  return <h1 className="bg-slate-500">App</h1>;
+  return (
+    <SectionProvider>
+      <FavoriteProvider>
+        <RouterProvider router={router} />
+      </FavoriteProvider>
+    </SectionProvider>
+  );
 }
+
 export default App;

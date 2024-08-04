@@ -7,19 +7,14 @@ import {
   CarouselPrevious,
 } from "../../components/ui/carousel";
 
-import { Movie, ShowType } from "../../types";
+import { Movie } from "../../types";
 
 type CarouselMoviesProps = {
   movies?: Movie[];
-  handleFavorite: (id: number , type: ShowType) => void;
   className?: string;
 };
 
-const CarouselMovies = ({
-  movies,
-  className,
-  handleFavorite,
-}: CarouselMoviesProps) => {
+const CarouselMovies = ({ movies, className }: CarouselMoviesProps) => {
   return (
     <div className="relative">
       <Carousel
@@ -33,7 +28,7 @@ const CarouselMovies = ({
           {movies?.map((movie) => (
             <CarouselItem key={movie.id} className="basis-52">
               <div className="p-1">
-                <MovieCard movie={movie} handleFavorite={handleFavorite} />
+                <MovieCard movie={movie} />
               </div>
             </CarouselItem>
           ))}
