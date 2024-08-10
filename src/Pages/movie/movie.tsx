@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import useMovies from "../../hooks/useMovies";
 import { useEffect, useState } from "react";
-import { IMAGE_BASE_MOVIE } from "../../hooks/constants";
+import { IMAGE_BASE_MOVIE } from "../../constants";
 import Checkbox from "../../components/checkbox/checkbox";
 
 const Movie = () => {

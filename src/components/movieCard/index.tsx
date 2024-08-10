@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { IMAGE_BASE_URL } from "../../hooks/constants";
+import { IMAGE_BASE_URL } from "../../constants";
 import { Movie } from "../../types";
 import Checkbox from "../checkbox/checkbox";
 import { useContext, useEffect, useState } from "react";
